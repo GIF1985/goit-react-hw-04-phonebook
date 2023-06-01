@@ -3,29 +3,17 @@ import PropTypes from 'prop-types';
 import styles from './ContactForm.module.css';
 
 const ContactForm = ({ onSubmit }) => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+  const [contact, setContact] = useState({ name: '', number: '' });
 
   const handleChange = event => {
     const { name, value } = event.target;
-    if (name === 'name') {
-      setName(value);
-    } else if (name === 'number') {
-      setNumber(value);
-    }
+    setContact(prevState => ({ ...prevState, [name]: value }));
   };
 
   const handleSubmit = event => {
     event.preventDefault();
-
-    const normalizedContact = {
-      name: name.toLowerCase(),
-      number,
-    };
-
-    onSubmit(normalizedContact);
-    setName('');
-    setNumber('');
+    onSubmit(contact);
+    setContact({ name: '', number: '' });
   };
 
   return (
@@ -39,7 +27,7 @@ const ContactForm = ({ onSubmit }) => {
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
-          value={name}
+          value={contact.name}
           onChange={handleChange}
         />
       </label>
@@ -49,7 +37,7 @@ const ContactForm = ({ onSubmit }) => {
           className={styles.input}
           type="text"
           name="number"
-          value={number}
+          value={contact.number}
           onChange={handleChange}
         />
       </label>
